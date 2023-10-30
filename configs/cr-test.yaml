@@ -1,0 +1,26 @@
+apiVersion: schedule.rs/v1
+kind: PodSchedule
+metadata:
+  name: pod-schedule-test
+  namespace: test
+spec:
+  container:
+    image: nginxdemos/hello
+    port: 8000
+  schedulingConfig:
+    - startTime: 9
+      endTime: 17
+      replica: 5
+    - startTime: 17
+      endTime: 19
+      replica: 3
+    - startTime: 19
+      endTime: 0
+      replica: 2
+    - startTime: 1
+      endTime: 7
+      replica: 2
+    - startTime: 7
+      endTime: 9
+      replica: 3
+  defaultReplica: 3
