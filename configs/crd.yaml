@@ -4,11 +4,11 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.10.0
   creationTimestamp: null
-  name: pods.schedule.rs
+  name: podschedules.schedule.rs
 spec:
   group: schedule.rs
   names:
-    kind: PodSchedule
+    kind: podScheduler
     listKind: PodScheduleList
     plural: podschedules
     singular: podschedule

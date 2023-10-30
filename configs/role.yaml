@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   creationTimestamp: null
-  name: podScheduler-controller-manager-role
+  name: pod-scheduler-controller-manager-role
 rules:
   - apiGroups:
       - apps
@@ -19,7 +19,7 @@ rules:
   - apiGroups:
       - schedule.rs
     resources:
-      - PodSchedule
+      - pod-scheduler
     verbs:
       - create
       - delete
@@ -31,13 +31,13 @@ rules:
   - apiGroups:
       - schedule.rs
     resources:
-      - PodSchedule/finalizers
+      - pod-scheduler/finalizers
     verbs:
       - update
   - apiGroups:
       - schedule.rs
     resources:
-      - PodSchedule/status
+      - pod-scheduler/status
     verbs:
       - get
       - patch
@@ -47,7 +47,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: podScheduler-leader-election-role
+  name: pod-scheduler-leader-election-role
   namespace: test
 rules:
   - apiGroups:

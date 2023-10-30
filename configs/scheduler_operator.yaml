@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: podScheduler-controller-manager
-  namespace: podScheduler-example
+  name: pod-scheduler-controller-manager
+  namespace: test
   labels:
-    control-plane: podScheduler-controller-manager
+    control-plane: pod-scheduler-controller-manager
 spec:
   selector:
     matchLabels:
-      control-plane: podScheduler-controller-manager
+      control-plane: pod-scheduler-controller-manager
   replicas: 1
   template:
     metadata:
       annotations:
-        kubectl.kubernetes.io/default-container: podScheduler-controller-manager
+        kubectl.kubernetes.io/default-container: pod-scheduler-controller-manager
       labels:
-        control-plane: podScheduler-controller-manager
+        control-plane: pod-scheduler-controller-manager
     spec:
       securityContext:
         runAsNonRoot: true
@@ -50,5 +50,5 @@ spec:
             requests:
               cpu: 10m
               memory: 32Mi
-      serviceAccountName: podScheduler-controller-manager-sa
+      serviceAccountName: pod-scheduler-controller-manager-sa
       terminationGracePeriodSeconds: 10
