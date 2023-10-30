@@ -10,7 +10,7 @@ spec:
   names:
     shortNames:
       - ps
-    kind: podScheduler
+    kind: PodScheduler
     listKind: PodScheduleList
     plural: podschedules
     singular: podschedule

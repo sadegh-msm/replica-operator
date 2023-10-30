@@ -1,0 +1,12 @@
+apiVersion: schedule.my.domain/v1
+kind: PodScheduler
+metadata:
+  labels:
+    app.kubernetes.io/name: podscheduler
+    app.kubernetes.io/instance: podscheduler-sample
+    app.kubernetes.io/part-of: operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: operator
+  name: podscheduler-sample
+spec:
+  # TODO(user): Add fields here

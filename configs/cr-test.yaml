@@ -1,5 +1,5 @@
 apiVersion: schedule.rs/v1
-kind: podScheduler
+kind: PodScheduler
 metadata:
   name: pod-schedule-test
   namespace: test
