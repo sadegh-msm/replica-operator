@@ -8,6 +8,8 @@ metadata:
 spec:
   group: schedule.rs
   names:
+    shortNames:
+      - ps
     kind: podScheduler
     listKind: PodScheduleList
     plural: podschedules
