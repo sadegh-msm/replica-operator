@@ -23,19 +23,48 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
+type Container struct {
+	Image string `json:"image"`
+	Port  int    `json:"port"`
+}
+
+type Service struct {
+	Port int `json:"port"`
+}
+
+type Scheduling struct {
+	// +kubebuilder:validation:Minimum=0
+	// +kubebuilder:validation:Maximum=23
+	StartTime int `json:"startTime"`
+	// +kubebuilder:validation:Minimum=0
+	// +kubebuilder:validation:Maximum=23
+	EndTime int `json:"endTime"`
+	// +kubebuilder:validation:Minimum=0
+	Replica int `json:"replica"`
+}
+
 // PodSchedulerSpec defines the desired state of PodScheduler
 type PodSchedulerSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
-	// Foo is an example field of PodScheduler. Edit podscheduler_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	// +kubebuilder:validation:Required
+	Container Container `json:"container"`
+	// +kubebuilder:validation:Optional
+	Service Service `json:"service,omitempty"`
+	// +kubebuilder:validation:Required
+	SchedulingConfig []*Scheduling `json:"schedulingConfig"`
+	// +kubebuilder:validation:Required
+	// +kubebuilder:validation:Minimum=1
+	DefaultReplica int32 `json:"defaultReplica"`
+	// +kubebuilder:validation:Optional
+	// +kubebuilder:validation:Minimum=1
+	// +kubebuilder:validation:Maximum=1440
+	IntervalMint int32 `json:"intervalMint"`
 }
 
 // PodSchedulerStatus defines the observed state of PodScheduler
 type PodSchedulerStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
+	Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,rep,name=conditions"`
 }
 
 //+kubebuilder:object:root=true
