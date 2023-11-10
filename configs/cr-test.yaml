@@ -1,8 +1,8 @@
-apiVersion: schedule.rs/v1
+apiVersion: schedule.my.domain/v1
 kind: PodScheduler
 metadata:
-  name: pod-schedule-test
-  namespace: test
+  name: test
+  namespace: default
 spec:
   container:
     image: nginxdemos/hello
