@@ -18,6 +18,9 @@ package controllers
 
 import (
 	"context"
+	v1 "k8s.io/api/apps/v1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
+	"time"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -25,6 +28,10 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
 	schedulev1 "replica-operator/api/v1"
+)
+
+const (
+	DefaultReconciliationIntervalInMinute = 5
 )
 
 // PodSchedulerReconciler reconciles a PodScheduler object
@@ -51,15 +58,58 @@ func (r *PodSchedulerReconciler) Reconcile(ctx context.Context, req ctrl.Request
 
 	log.Info("starting reconciliation")
 
-	//podSchedule := schedulev1.PodScheduler{}
+	scheduler := &schedulev1.PodScheduler{}
 
+	err := r.GetPodScheduler(ctx, req, scheduler)
+	if err != nil {
+		if apierrors.IsNotFound(err) {
+			log.Info("podScheduler resource not found. Ignoring since object must be deleted")
 
-	return ctrl.Result{}, nil
+			return ctrl.Result{}, nil
+		}
+		log.Error(err, "Failed to get podScheduler")
+
+		return ctrl.Result{}, err
+	}
+
+	err = r.SetInitialCondition(ctx, req, scheduler)
+	if err != nil {
+		log.Error(err, "failed to set initial condition")
+
+		return ctrl.Result{}, err
+	}
+
+	ok, err := r.DeploymentIfNotExist(ctx, req, scheduler)
+	if err != nil {
+		log.Error(err, "failed to deploy deployment for podScheduler")
+
+		return ctrl.Result{}, err
+	}
+	if ok {
+		return ctrl.Result{RequeueAfter: time.Minute}, nil
+	}
+
+	err = r.UpdateDeploymentReplica(ctx, req, scheduler)
+	if err != nil {
+		log.Error(err, "failed to update deployment for podScheduler")
+
+		return ctrl.Result{}, err
+	}
+
+	interval := DefaultReconciliationIntervalInMinute
+	if scheduler.Spec.IntervalMint != 0 {
+		interval = int(scheduler.Spec.IntervalMint)
+	}
+
+	log.Info("ending reconciliation")
+
+	return ctrl.Result{RequeueAfter: time.Minute * time.Duration(interval)}, nil
 }
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *PodSchedulerReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&schedulev1.PodScheduler{}).
+		Owns(&v1.Deployment{}).
 		Complete(r)
 }
