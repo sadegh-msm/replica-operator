@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func (r *PodSchedulerReconciler) GetExpectedReplica(ctx context.Context, req ctrl.Request, scheduler v1.PodScheduler) (int32, error) {
+func (r *PodSchedulerReconciler) GetExpectedReplica(ctx context.Context, req ctrl.Request, scheduler *v1.PodScheduler) (int32, error) {
 	log := log.FromContext(ctx)
 
 	if scheduler.Spec.SchedulingConfig != nil {
