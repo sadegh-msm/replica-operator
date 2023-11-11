@@ -25,8 +25,8 @@ You’ll need a Kubernetes cluster to run against. You can use [KIND](https://si
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/k8s-replica-scaler-operator.git
-cd k8s-replica-scaler-operator
+git clone https://github.com/sadegh-msm/replica-operator.git
+cd replica-operator
 ```
 
 2. Install Instances of Custom Resources:
